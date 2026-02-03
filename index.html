@@ -16,9 +16,15 @@
 <body>
 
 <div class="forkt-panel">
-  <h1>FORKT PANEL</h1>
 
-  <div class="info-box">
+  <!-- HEADER -->
+  <header class="panel-header">
+    <h1>FORKT PANEL</h1>
+    <div class="panel-subtitle">OFFICIAL WEB FORKT</div>
+  </header>
+
+  <!-- INFORMATION -->
+  <section class="info-box">
     <h2>
       <i class="fa-solid fa-circle-info"></i>
       INFORMATION
@@ -29,7 +35,7 @@
         <i class="fa-solid fa-code-branch"></i>
         Latest Version
       </span>
-      <b id="versionText">checking...</b>
+      <b id="versionText" class="value">checking...</b>
     </div>
 
     <div class="info-row">
@@ -37,7 +43,7 @@
         <i class="fa-solid fa-signal"></i>
         Status
       </span>
-      <b id="statusBadge">Loading</b>
+      <b id="statusBadge" class="badge">Loading</b>
     </div>
 
     <div class="info-row">
@@ -45,11 +51,12 @@
         <i class="fa-solid fa-user-shield"></i>
         Account Type
       </span>
-      <b id="vipStatus">Checking...</b>
+      <b id="vipStatus" class="badge">Checking...</b>
     </div>
-  </div>
+  </section>
 
-  <div class="notes-box">
+  <!-- CHANGELOG -->
+  <section class="notes-box">
     <h2>
       <i class="fa-solid fa-list-check"></i>
       CHANGELOG
@@ -61,18 +68,21 @@
         Loading...
       </li>
     </ul>
-  </div>
+  </section>
 
-  <button id="downloadBtn" disabled>
-    Download
+  <!-- DOWNLOAD -->
+  <button id="downloadBtn" class="download-btn" disabled>
     <i class="fa-solid fa-download"></i>
+    Download FORKT Panel
   </button>
 
-  <p id="statusText">
+  <!-- STATUS -->
+  <p id="statusText" class="status-text">
     <i class="fa-solid fa-clock"></i>
     Checking latest version...
   </p>
 
+  <!-- FOOTER -->
   <footer>
     <i class="fa-solid fa-heart"></i>
     CREDITS WEB by <span>@sukitovone</span>
