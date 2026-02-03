@@ -1,0 +1,236 @@
+/* =========================
+   GLOBAL
+========================= */
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, #3a0f6d, #0b0614 70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  overflow: hidden;
+  animation: bgFade 1.2s ease forwards;
+}
+
+/* =========================
+   PANEL
+========================= */
+.forkt-panel {
+  width: 92%;
+  max-width: 420px;
+  background: rgba(25, 12, 50, 0.92);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow:
+    0 30px 60px rgba(0,0,0,.55),
+    0 0 60px rgba(160,80,255,.35);
+  text-align: center;
+  animation: panelEnter .9s cubic-bezier(.2,.8,.2,1);
+  position: relative;
+}
+
+/* glow border */
+.forkt-panel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 24px;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(160,80,255,.35),
+    transparent
+  );
+  opacity: .6;
+  pointer-events: none;
+}
+
+/* =========================
+   HEADER
+========================= */
+.forkt-panel h1 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 1.2px;
+  color: #d7b6ff;
+}
+
+.panel-subtitle {
+  font-size: 12px;
+  opacity: .7;
+  margin-top: 4px;
+}
+
+/* =========================
+   INFO / NOTES BOX
+========================= */
+.info-box,
+.notes-box {
+  margin-top: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(30,15,60,.9),
+    rgba(18,8,36,.95)
+  );
+  border-radius: 16px;
+  padding: 14px;
+  animation: fadeUp .8s ease both;
+}
+
+.info-box h2,
+.notes-box h2 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #b993ff;
+  text-align: center;
+}
+
+/* =========================
+   INFO ROW
+========================= */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(255,255,255,.08);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row b {
+  color: #eee;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  font-size: 12px;
+}
+
+/* status colors */
+.ready { color: #6bffb3; }
+.vip   { color: #ffd36b; }
+.free  { color: #ff6b6b; }
+
+/* =========================
+   CHANGELOG
+========================= */
+.notes-box {
+  max-height: 160px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.notes-box ul {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.notes-box li {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #e6d4ff;
+  line-height: 1.45;
+}
+
+/* scrollbar */
+.notes-box::-webkit-scrollbar {
+  width: 5px;
+}
+.notes-box::-webkit-scrollbar-thumb {
+  background: linear-gradient(#7f2aff, #b66bff);
+  border-radius: 10px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #7f2aff, #b66bff);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: .3s ease;
+  box-shadow: 0 10px 30px rgba(159,123,255,.4);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(159,123,255,.6);
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* =========================
+   STATUS + FOOTER
+========================= */
+#statusText {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: .75;
+}
+
+footer {
+  margin-top: 18px;
+  font-size: 12px;
+  opacity: .6;
+}
+
+footer span {
+  color: #c38cff;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+@keyframes panelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(.92);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes bgFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
