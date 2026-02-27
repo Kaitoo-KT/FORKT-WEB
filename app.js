@@ -1,11 +1,13 @@
 /* ==========================
    ELEMENT
 ========================== */
-const versionText = document.getElementById("versionText");
-const statusText = document.getElementById("statusText");
-const downloadBtn = document.getElementById("downloadBtn");
-const statusBadge = document.getElementById("statusBadge");
-const notesList = document.getElementById("notesList");
+const versionText   = document.getElementById("versionText");
+const statusText    = document.getElementById("statusText");
+const downloadBtn   = document.getElementById("downloadBtn");
+const progressFill  = document.getElementById("progressFill");
+const progressText  = document.getElementById("progressText");
+const statusBadge   = document.getElementById("statusBadge");
+const notesList     = document.getElementById("notesList");
 const vipStatusText = document.getElementById("vipStatus");
 
 /* ==========================
@@ -64,17 +66,32 @@ async function loadVersion() {
     const data = await res.json();
     if (!data.version) throw new Error("Invalid version.json");
 
-    // SET VERSION
     CURRENT_VERSION = data.version;
     versionText.textContent = CURRENT_VERSION;
 
-    // CHANGELOG
     notesList.innerHTML = "";
     if (Array.isArray(data.notes) && data.notes.length) {
       data.notes.forEach(note => {
         const li = document.createElement("li");
-        li.textContent = note;
+        li.innerHTML = `<i class="fa-solid fa-arrow-right"></i> ${note}`;
         notesList.appendChild(li);
+      });
+    const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if(entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        },
+        {
+          threshold: 0.1
+        }
+      );
+      
+      // 4️⃣ Observasi semua li
+      document.querySelectorAll("#notesList li").forEach(li => {
+        observer.observe(li);
       });
     } else {
       notesList.innerHTML = "<li>No changelog available</li>";
@@ -89,53 +106,77 @@ async function loadVersion() {
     setStatus("Error", err.message, "#ff6b6b");
   }
 }
-
 /* ==========================
    DOWNLOAD
 ========================== */
 if (downloadBtn) {
   downloadBtn.addEventListener("click", async () => {
-  if (!CURRENT_VERSION) {
-    alert("Version not loaded yet");
-    return;
-  }
+    if (!CURRENT_VERSION) {
+      alert("Version not loaded yet");
+      return;
+    }
 
-  const filename = `FORKT-PANEL(${CURRENT_VERSION}).zip`;
-
-  setStatus(
-    "Downloading",
-    `Downloading FORKT PANEL v${CURRENT_VERSION}...`,
-    "#9f7bff"
-  );
-
-  try {
-    const res = await fetch(DOWNLOAD_URL);
-    if (!res.ok) throw new Error("Download failed");
-
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    window.URL.revokeObjectURL(url);
+    const filename = `FORKT-PANEL(${CURRENT_VERSION}).zip`;
 
     setStatus(
-      "Done",
-      `Download completed ✔ (${filename})`,
-      "#6bffb3",
-      true
+      "Downloading",
+      `Downloading FORKT PANEL v${CURRENT_VERSION}...`,
+      "#9f7bff"
     );
 
-  } catch (err) {
-    console.error(err);
-    setStatus("Error", "Failed to download file", "#ff6b6b");
-  }
-});
+    progressFill.style.width = "0%";
+    progressText.textContent = "0%";
+
+    try {
+      const res = await fetch(DOWNLOAD_URL);
+      if (!res.ok) throw new Error("Download failed");
+
+      const reader = res.body.getReader();
+      const contentLength = +res.headers.get("Content-Length");
+
+      let receivedLength = 0;
+      const chunks = [];
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        chunks.push(value);
+        receivedLength += value.length;
+
+        if (contentLength) {
+          const percent = Math.floor((receivedLength / contentLength) * 100);
+          progressFill.style.width = percent + "%";
+          progressText.textContent = percent + "%";
+        }
+      }
+
+      const blob = new Blob(chunks);
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      progressFill.style.width = "100%";
+      progressText.textContent = "Complete ✓";
+
+      setStatus(
+        "Done",
+        `Download completed ✔ (${filename})`,
+        "#6bffb3",
+        true
+      );
+
+    } catch (err) {
+      console.error(err);
+      setStatus("Error", "Failed to download file", "#ff6b6b");
+    }
+  });
 }
 
 /* ==========================

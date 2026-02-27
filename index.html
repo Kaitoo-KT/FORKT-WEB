@@ -24,69 +24,86 @@
   </header>
 
   <!-- INFORMATION -->
-  <section class="info-box">
-    <h2>
-      <i class="fa-solid fa-circle-info"></i>
-      INFORMATION
-    </h2>
+<section class="info-box">
+  <h2 class="section-title">
+    <i class="fa-solid fa-circle-info"></i>
+    <span>Information</span>
+  </h2>
 
-    <div class="info-row">
-      <span>
-        <i class="fa-solid fa-code-branch"></i>
-        Latest Version
-      </span>
-      <b id="versionText" class="value">checking...</b>
+  <div class="info-row">
+    <div class="info-left">
+      <i class="fa-solid fa-code-branch icon"></i>
+      <span>Latest Version</span>
     </div>
+    <b id="versionText" class="value">checking...</b>
+  </div>
 
-    <div class="info-row">
-      <span>
-        <i class="fa-solid fa-signal"></i>
-        Status
-      </span>
-      <b id="statusBadge" class="badge">Loading</b>
+  <div class="info-row">
+    <div class="info-left">
+      <i class="fa-solid fa-signal icon"></i>
+      <span>Status</span>
     </div>
+    <b id="statusBadge" class="badge">Loading</b>
+  </div>
 
-    <div class="info-row">
-      <span>
-        <i class="fa-solid fa-user-shield"></i>
-        Account Type
-      </span>
-      <b id="vipStatus" class="badge">Checking...</b>
+  <div class="info-row">
+    <div class="info-left">
+      <i class="fa-solid fa-user-shield icon"></i>
+      <span>Account Type</span>
     </div>
-  </section>
+    <b id="vipStatus" class="badge">Checking...</b>
+  </div>
+</section>
 
   <!-- CHANGELOG -->
-  <section class="notes-box">
-    <h2>
-      <i class="fa-solid fa-list-check"></i>
-      CHANGELOG
-    </h2>
+<section class="notes-box">
+  <h2 class="section-title">
+    <i class="fa-solid fa-list-check"></i>
+    <span>Changelog</span>
+  </h2>
 
-    <ul id="notesList">
-      <li>
-        <i class="fa-solid fa-spinner fa-spin"></i>
-        Loading...
-      </li>
-    </ul>
-  </section>
+  <ul id="notesList">
+    <li>
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading...
+    </li>
+  </ul>
+</section>
 
   <!-- DOWNLOAD -->
   <button id="downloadBtn" class="download-btn" disabled>
     <i class="fa-solid fa-download"></i>
-    Download FORKT Panel
-  </button>
-
+    <span>Download</span>
+ </button>
+  <div class="download-progress">
+   <div class="progress-bar">
+     <div class="progress-fill" id="progressFill"></div>
+   </div>
+  <span id="progressText">0%</span>
+</div>
   <!-- STATUS -->
   <p id="statusText" class="status-text">
-    <i class="fa-solid fa-clock"></i>
-    Checking latest version...
-  </p>
+  <i class="fa-solid fa-clock"></i>
+  Checking latest version...
+</p>
 
-  <!-- FOOTER -->
-  <footer>
-    <i class="fa-solid fa-heart"></i>
-    CREDITS WEB by <span>@sukitovone</span>
-  </footer>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="social-links">
+    <a href="https://t.me/forktch" target="_blank" class="social-btn telegram">
+      <i class="fa-brands fa-telegram"></i>
+      Telegram
+    </a>
+
+    <a href="https://whatsapp.com/channel/0029VazhfIiJf05jBKkGKe1F" target="_blank" class="social-btn whatsapp">
+      <i class="fa-brands fa-whatsapp"></i>
+      WhatsApp
+    </a>
+  </div>
+  <div class="credits">
+    ©Credits By <span>@sukitovone</span>
+  </div>
+</footer>
 
 </div>
 

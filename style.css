@@ -22,72 +22,183 @@ body {
   overflow-y: auto; /* 🔥 FIX utama: biar gak kepotong */
   animation: bgFade 1.2s ease forwards;
 }
-
-/* =========================
-   PANEL
-========================= */
+/* ==========================
+   PANEL BASE
+========================== */
 .forkt-panel {
-  width: 100%;
-  max-width: 420px;
-  background: rgba(25, 12, 50, 0.95);
-  backdrop-filter: blur(14px);
-  border-radius: 22px;
-  padding: 22px 18px;
-  box-shadow:
-    0 25px 55px rgba(0,0,0,.55),
-    0 0 50px rgba(160,80,255,.35);
-  text-align: center;
   position: relative;
-  animation: panelEnter .8s cubic-bezier(.2,.8,.2,1);
+  border-radius: 20px;
+  padding: 20px;
+  background: rgba(20, 20, 35, 0.65);
+  backdrop-filter: blur(22px);
+  overflow: hidden;
+  z-index: 0;
+  box-shadow:
+    0 0 25px rgba(123,44,255,.4),
+    0 0 60px rgba(0,224,255,.25);
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
-/* glow border */
+/* ==========================
+   ANIMATED GRADIENT BORDER
+========================== */
 .forkt-panel::before {
   content: "";
   position: absolute;
-  inset: -1px;
-  border-radius: 24px;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+
   background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(160,80,255,.4),
-    transparent
+    270deg,
+    #7b2cff,
+    #c38cff,
+    #00e0ff,
+    #7b2cff
   );
-  opacity: .6;
-  pointer-events: none;
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite;
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+  z-index: -1;
+}
+
+/* ==========================
+   OUTER NEON GLOW
+========================== */
+.forkt-panel::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    rgba(123,44,255,0.35),
+    rgba(0,224,255,0.25),
+    transparent 70%
+  );
+  
+  filter: blur(22px);
+  opacity: .8;
+  z-index: -2;
+  transition: opacity .3s ease, filter .3s ease;
+}
+
+/* ==========================
+   ANIMATION
+========================== */
+@keyframes gradientMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* =========================
    HEADER
 ========================= */
+.panel-header {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+/* Title */
 .panel-header h1 {
   margin: 0;
-  font-size: 26px;
-  letter-spacing: 1.2px;
-  color: #d7b6ff;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+
+  /* Gradient text */
+  background: linear-gradient(135deg, #c38cff, #7b2cff, #00e0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* subtle glow */
+  text-shadow:
+    0 0 10px rgba(160, 120, 255, 0.35),
+    0 0 20px rgba(0, 224, 255, 0.15);
+ background-size: 200% auto;
+  animation: shimmer 6s linear infinite;
+  animation: titleFade .8s ease;
 }
 
+/* Subtitle */
 .panel-subtitle {
   font-size: 12px;
-  opacity: .7;
-  margin-top: 4px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-top: 6px;
+  color: #cdb7ff;
+
+  /* subtle divider effect */
+  position: relative;
+  display: inline-block;
+  padding: 0 10px;
 }
 
+.panel-subtitle::before,
+.panel-subtitle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 1px;
+  background: rgba(195, 140, 255, 0.4);
+}
+
+.panel-subtitle::before { left: -22px; }
+.panel-subtitle::after  { right: -22px; }
+
+/* Animation */
+@keyframes titleFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
 /* =========================
    INFO / NOTES BOX
 ========================= */
-.info-box,
-.notes-box {
+.info-box {
   margin-top: 18px;
   background: linear-gradient(
     180deg,
     rgba(30,15,60,.9),
-    rgba(18,8,36,.95)
+    rgba(18,8,36,.96)
   );
-  border-radius: 16px;
-  padding: 14px;
+  border-radius: 18px;
+  padding: 16px 14px;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 10px 25px rgba(0,0,0,.35);
 }
-
+.section-title {
+  margin: 0 0 14px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #b993ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-transform: uppercase;
+}
 .info-box h2,
 .notes-box h2 {
   margin: 0 0 12px;
@@ -104,10 +215,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  padding: 8px 0;
-  border-bottom: 1px dashed rgba(255,255,255,.08);
+  padding: 10px 4px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.info-row:last-child {
+  border-bottom: none;
 }
 
 .info-row span {
@@ -121,99 +234,379 @@ body {
   border-bottom: none;
 }
 
-.info-row b {
-  white-space: nowrap;
+.info-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  opacity: .9;
+}
+
+/* modern icon circle */
+.icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  background: rgba(159,123,255,.12);
+  color: #caa8ff;
+  box-shadow: inset 0 0 8px rgba(159,123,255,.25);
+}
+
+/* value text */
+.value {
   font-weight: 600;
+  color: #f1eaff;
+  letter-spacing: .3px;
 }
 
 /* badge */
 .badge {
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: rgba(255,255,255,.1);
   font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(4px);
 }
 
-/* status colors */
-.ready { color: #6bffb3; }
-.vip   { color: #ffd36b; }
-.free  { color: #ff6b6b; }
+/* badge colors */
+.badge.ready { color: #6bffb3; }
+.badge.vip   { color: #ffd36b; }
+.badge.free  { color: #ff6b6b; }
 
 /* =========================
    CHANGELOG (FIX SCROLL)
 ========================= */
+/* =========================
+   NOTES BOX
+========================= */
 .notes-box {
-  max-height: 160px;
+  margin-top: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(30,15,60,.88),
+    rgba(18,8,36,.95)
+  );
+  border-radius: 18px;
+  padding: 16px 14px;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 12px 28px rgba(0,0,0,.22);
+  max-height: 180px;
   overflow-y: auto;
-  text-align: left;
 }
 
+/* Section title */
+.notes-box .section-title {
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #b993ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* List */
 .notes-box ul {
-  padding-left: 18px;
+  padding-left: 0;
   margin: 0;
+  list-style: none;
 }
 
 .notes-box li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 13px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  padding: 6px 4px;
+  border-radius: 8px;
   color: #e6d4ff;
-  line-height: 1.45;
+  line-height: 1.5;
+  transition: background .2s ease, transform .2s ease;
 }
 
-/* scrollbar */
+.notes-box li:hover {
+  background: rgba(255,255,255,.03);
+  transform: translateX(2px);
+}
+
+/* Icon for each list item */
+.notes-box li i {
+  width: 18px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  color: #caa8ff;
+  flex-shrink: 0;
+}
+.notes-box li.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* custom scrollbar */
 .notes-box::-webkit-scrollbar {
   width: 5px;
 }
 .notes-box::-webkit-scrollbar-thumb {
   background: linear-gradient(#7f2aff, #b66bff);
-  border-radius: 10px;
+  border-radius: 20px;
 }
-
+.notes-box::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
 /* =========================
-   BUTTON
+   MODERN DOWNLOAD BUTTON
 ========================= */
 .download-btn {
+  position: relative;
   width: 100%;
-  margin-top: 16px;
-  padding: 14px;
+  margin-top: 14px;
+  padding: 14px 18px;
   border-radius: 16px;
   border: none;
   background: linear-gradient(135deg, #7f2aff, #b66bff);
   color: #fff;
   font-weight: 600;
   font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   cursor: pointer;
-  transition: .3s ease;
-  box-shadow: 0 10px 30px rgba(159,123,255,.4);
+  transition: all .25s ease;
+  box-shadow:
+    0 10px 25px rgba(159,123,255,.35),
+    inset 0 0 0 rgba(255,255,255,0);
+  overflow: hidden;
 }
 
+/* glow border animation */
+.download-btn::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: linear-gradient(
+    270deg,
+    #7b2cff,
+    #c38cff,
+    #00e0ff,
+    #7b2cff
+  );
+  background-size: 400% 400%;
+  opacity: 0;
+  transition: opacity .3s ease;
+  z-index: -1;
+}
+
+/* hover state */
 .download-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(159,123,255,.6);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 15px 35px rgba(159,123,255,.55);
 }
 
+.download-btn:hover:not(:disabled)::before {
+  opacity: .7;
+  animation: gradientMove 6s linear infinite;
+}
+
+/* active click */
+.download-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* disabled state */
 .download-btn:disabled {
   opacity: .55;
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* icon style */
+.download-btn i {
+  font-size: 15px;
+  opacity: .9;
+}
+
+/* text */
+.download-btn span {
+  letter-spacing: .3px;
+}
+
+/* gradient animation */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
 }
 
 /* =========================
-   STATUS + FOOTER
+   DOWNLOAD PROGRESS BAR
 ========================= */
-.status-text {
-  margin-top: 10px;
-  font-size: 13px;
+.download-progress {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0,0,0,.5);
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #7b2cff, #c38cff, #00e0ff);
+  background-size: 200% 200%;
+  animation: gradientFlow 4s linear infinite;
+  transition: width .3s ease;
+}
+
+#progressText {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
   opacity: .75;
 }
 
-footer {
-  margin-top: 18px;
-  font-size: 12px;
-  opacity: .6;
+/* ANIMATION */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+/* =========================
+   STATUS TEXT (MODERN)
+========================= */
+.status-text {
+  margin-top: 10px;   /* sebelumnya terlalu besar */
+  margin-bottom: 6px; /* 🔥 jarak ke footer lebih dekat */
+  font-size: 13px;
+  opacity: .8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #cdb7ff;
 }
 
-footer span {
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  margin-top: 6px;
+  padding-top: 10px;
+  position: relative;
+}
+
+/* garis tipis elegan */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+ /* left: 12%;
+  width: 76%;*/
+  height: 1px;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 0 8px rgba(160, 80, 255, 0.6);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(195, 140, 255, 0.5),
+    transparent
+  );
+}
+
+
+
+/* credits */
+.credits {
+  font-size: 12px;
+  margin-left: 70px;
+  opacity: .7;
+  margin-top: 12px;
+  letter-spacing: .5px;
+}
+
+.credits span {
   color: #c38cff;
+  font-weight: 600;
+}
+
+/* =========================
+   SOCIAL LINKS (1 ROW)
+========================= */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* button base */
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  transition: 0.25s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 12px rgba(195,140,255,0.15);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Telegram style */
+.social-btn.telegram {
+  background: rgba(0, 136, 204, 0.15);
+}
+
+.social-btn.telegram:hover {
+  background: rgba(0, 136, 204, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,136,204,.35);
+}
+
+/* WhatsApp style */
+.social-btn.whatsapp {
+  background: rgba(37, 211, 102, 0.15);
+}
+
+.social-btn.whatsapp:hover {
+  background: rgba(37, 211, 102, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37,211,102,.35);
+}
+
+/* =========================
+   MOBILE OPTIMIZATION
+========================= */
+@media (max-width: 420px) {
+  .social-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 11px;
+    padding: 8px;
+  }
 }
 
 /* =========================
@@ -229,205 +622,6 @@ footer span {
     opacity: 1;
     transform: none;
     filter: none;
-  }
-}
-
-@keyframes bgFade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}  position: relative;
-}
-
-/* glow border */
-.forkt-panel::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 24px;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(160,80,255,.35),
-    transparent
-  );
-  opacity: .6;
-  pointer-events: none;
-}
-
-/* =========================
-   HEADER
-========================= */
-.forkt-panel h1 {
-  margin: 0;
-  font-size: 26px;
-  letter-spacing: 1.2px;
-  color: #d7b6ff;
-}
-
-.panel-subtitle {
-  font-size: 12px;
-  opacity: .7;
-  margin-top: 4px;
-}
-
-/* =========================
-   INFO / NOTES BOX
-========================= */
-.info-box,
-.notes-box {
-  margin-top: 18px;
-  background: linear-gradient(
-    180deg,
-    rgba(30,15,60,.9),
-    rgba(18,8,36,.95)
-  );
-  border-radius: 16px;
-  padding: 14px;
-  animation: fadeUp .8s ease both;
-}
-
-.info-box h2,
-.notes-box h2 {
-  margin: 0 0 12px;
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: #b993ff;
-  text-align: center;
-}
-
-/* =========================
-   INFO ROW
-========================= */
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  padding: 8px 0;
-  border-bottom: 1px dashed rgba(255,255,255,.08);
-}
-
-.info-row:last-child {
-  border-bottom: none;
-}
-
-.info-row b {
-  color: #eee;
-}
-
-.badge {
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.08);
-  font-size: 12px;
-}
-
-/* status colors */
-.ready { color: #6bffb3; }
-.vip   { color: #ffd36b; }
-.free  { color: #ff6b6b; }
-
-/* =========================
-   CHANGELOG
-========================= */
-.notes-box {
-  max-height: 160px;
-  overflow-y: auto;
-  text-align: left;
-}
-
-.notes-box ul {
-  padding-left: 18px;
-  margin: 0;
-}
-
-.notes-box li {
-  font-size: 13px;
-  margin-bottom: 6px;
-  color: #e6d4ff;
-  line-height: 1.45;
-}
-
-/* scrollbar */
-.notes-box::-webkit-scrollbar {
-  width: 5px;
-}
-.notes-box::-webkit-scrollbar-thumb {
-  background: linear-gradient(#7f2aff, #b66bff);
-  border-radius: 10px;
-}
-
-/* =========================
-   BUTTON
-========================= */
-button {
-  width: 100%;
-  margin-top: 16px;
-  padding: 14px;
-  border-radius: 16px;
-  border: none;
-  background: linear-gradient(135deg, #7f2aff, #b66bff);
-  color: #fff;
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  transition: .3s ease;
-  box-shadow: 0 10px 30px rgba(159,123,255,.4);
-}
-
-button:hover:not(:disabled) {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(159,123,255,.6);
-}
-
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-/* =========================
-   STATUS + FOOTER
-========================= */
-#statusText {
-  margin-top: 10px;
-  font-size: 13px;
-  opacity: .75;
-}
-
-footer {
-  margin-top: 18px;
-  font-size: 12px;
-  opacity: .6;
-}
-
-footer span {
-  color: #c38cff;
-}
-
-/* =========================
-   ANIMATION
-========================= */
-@keyframes panelEnter {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(.92);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
   }
 }
 
