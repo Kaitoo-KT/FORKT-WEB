@@ -11,120 +11,114 @@ html, body {
   height: 100%;
 }
 
-body {
-  margin: 0;
-  padding: 20px;
-  background: radial-gradient(circle at top, #3a0f6d, #0b0614 70%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  overflow-y: auto; /* 🔥 FIX utama: biar gak kepotong */
-  animation: bgFade 1.2s ease forwards;
+body{
+margin:0;
+padding:20px;
+background:radial-gradient(circle at top,#3a0f6d,#0b0614 70%);
+display:flex;
+justify-content:center;
+align-items:center;
+color:#fff;
+overflow-y:auto;
+animation:bgFade .8s ease forwards;
 }
 /* ==========================
    PANEL BASE
 ========================== */
-.forkt-panel {
-  position: relative;
-  border-radius: 20px;
-  padding: 20px;
-  background: rgba(20, 20, 35, 0.65);
-  backdrop-filter: blur(22px);
-  overflow: hidden;
-  z-index: 0;
-  box-shadow:
-    0 0 25px rgba(123,44,255,.4),
-    0 0 60px rgba(0,224,255,.25);
-  transition: transform .3s ease, box-shadow .3s ease;
+.forkt-panel{
+position:relative;
+border-radius:20px;
+padding:20px;
+
+background:rgba(20,20,35,.8);
+
+/* blur dikurangi */
+backdrop-filter:blur(8px);
+
+overflow:hidden;
+z-index:0;
+
+/* shadow lebih ringan */
+box-shadow:0 8px 30px rgba(0,0,0,.4);
+
+transition:transform .25s ease;
+
+contain:content;
 }
 
 /* ==========================
    ANIMATED GRADIENT BORDER
 ========================== */
-.forkt-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: inherit;
+.forkt-panel::before{
+content:"";
+position:absolute;
+inset:0;
+padding:2px;
+border-radius:inherit;
 
-  background: linear-gradient(
-    270deg,
-    #7b2cff,
-    #c38cff,
-    #00e0ff,
-    #7b2cff
-  );
-  background-size: 400% 400%;
-  animation: gradientMove 8s ease infinite;
+background:linear-gradient(
+270deg,
+#7b2cff,
+#c38cff,
+#00e0ff,
+#7b2cff
+);
 
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
+/* animasi diperlambat */
+background-size:300% 300%;
+animation:gradientMove 20s linear infinite;
 
-  z-index: -1;
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+
+z-index:-1;
 }
 
 /* ==========================
    OUTER NEON GLOW
 ========================== */
-.forkt-panel::after {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: inherit;
-  background: radial-gradient(
-    circle at center,
-    rgba(123,44,255,0.35),
-    rgba(0,224,255,0.25),
-    transparent 70%
-  );
-  
-  filter: blur(22px);
-  opacity: .8;
-  z-index: -2;
-  transition: opacity .3s ease, filter .3s ease;
-}
+.forkt-panel::after{
+content:"";
+position:absolute;
+inset:-6px;
+border-radius:inherit;
 
-/* ==========================
-   ANIMATION
-========================== */
-@keyframes gradientMove {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+background:radial-gradient(
+circle,
+rgba(123,44,255,.25),
+transparent 70%
+);
+
+opacity:.5;
+z-index:-2;
 }
 
 /* =========================
    HEADER
 ========================= */
-.panel-header {
-  text-align: center;
-  margin-bottom: 6px;
+.panel-header{
+text-align:center;
+margin-bottom:6px;
 }
 
-/* Title */
-.panel-header h1 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+.panel-header h1{
+margin:0;
+font-size:26px;
+font-weight:700;
+letter-spacing:1.2px;
 
-  /* Gradient text */
-  background: linear-gradient(135deg, #c38cff, #7b2cff, #00e0ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+background:linear-gradient(135deg,#c38cff,#7b2cff,#00e0ff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 
-  /* subtle glow */
-  text-shadow:
-    0 0 10px rgba(160, 120, 255, 0.35),
-    0 0 20px rgba(0, 224, 255, 0.15);
- background-size: 200% auto;
-  animation: shimmer 6s linear infinite;
-  animation: titleFade .8s ease;
+background-size:200% auto;
+
+/* animasi lebih ringan */
+animation:shimmer 12s linear infinite,titleFade .7s ease;
 }
 
 /* Subtitle */
@@ -154,39 +148,17 @@ body {
 
 .panel-subtitle::before { left: -22px; }
 .panel-subtitle::after  { right: -22px; }
-
-/* Animation */
-@keyframes titleFade {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-    filter: blur(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-}
-@keyframes shimmer {
-  to { background-position: 200% center; }
-}
 /* =========================
    INFO / NOTES BOX
 ========================= */
-.info-box {
-  margin-top: 18px;
-  background: linear-gradient(
-    180deg,
-    rgba(30,15,60,.9),
-    rgba(18,8,36,.96)
-  );
-  border-radius: 18px;
-  padding: 16px 14px;
-  backdrop-filter: blur(10px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.05),
-    0 10px 25px rgba(0,0,0,.35);
+.info-box{
+margin-top:16px;
+background:rgba(25,18,45,.9);
+border-radius:16px;
+padding:14px;
+/* blur dikurangi */
+backdrop-filter:blur(6px);
+box-shadow:0 6px 18px rgba(0,0,0,.35);
 }
 .section-title {
   margin: 0 0 14px;
@@ -211,16 +183,25 @@ body {
 /* =========================
    INFO ROW (FIX ALIGN)
 ========================= */
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 4px;
-  border-bottom: 1px solid rgba(255,255,255,.06);
+.info-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:8px 4px;
+
+border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-.info-row:last-child {
-  border-bottom: none;
+.info-row:last-child{
+border-bottom:none;
+}
+
+.info-left{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:13px;
+opacity:.9;
 }
 
 .info-row span {
@@ -230,53 +211,40 @@ body {
   opacity: .85;
 }
 
-.info-row:last-child {
-  border-bottom: none;
-}
-
-.info-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  opacity: .9;
-}
-
 /* modern icon circle */
-.icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-  display: grid;
-  place-items: center;
-  font-size: 12px;
-  background: rgba(159,123,255,.12);
-  color: #caa8ff;
-  box-shadow: inset 0 0 8px rgba(159,123,255,.25);
+.icon{
+width:30px;
+height:30px;
+border-radius:8px;
+display:grid;
+place-items:center;
+font-size:14px;
+background:rgba(159,123,255,.15);
+color:#caa8ff;
 }
 
 /* value text */
 .value {
-  font-weight: 600;
+  font-weight: 500;
+  padding: 4px 10px;
+  font-size: 15px;
   color: #f1eaff;
   letter-spacing: .3px;
 }
 
 /* badge */
-.badge {
-  padding: 5px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .4px;
-  background: rgba(255,255,255,.08);
-  backdrop-filter: blur(4px);
+.badge{
+padding:4px 10px;
+border-radius:999px;
+font-size:11px;
+font-weight:600;
+background:rgba(255,255,255,.08);
 }
 
 /* badge colors */
 .badge.ready { color: #6bffb3; }
 .badge.vip   { color: #ffd36b; }
-.badge.free  { color: #ff6b6b; }
+.badge.free  { color: #0bb6f7; }
 
 /* =========================
    CHANGELOG (FIX SCROLL)
@@ -284,22 +252,20 @@ body {
 /* =========================
    NOTES BOX
 ========================= */
-.notes-box {
-  margin-top: 18px;
-  background: linear-gradient(
-    180deg,
-    rgba(30,15,60,.88),
-    rgba(18,8,36,.95)
-  );
-  border-radius: 18px;
-  padding: 16px 14px;
-  backdrop-filter: blur(12px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.05),
-    0 12px 28px rgba(0,0,0,.22);
-  max-height: 180px;
-  overflow-y: auto;
+.notes-box{
+margin-top:16px;
+
+background:rgba(25,18,45,.9);
+
+border-radius:16px;
+padding:14px;
+
+max-height:160px;
+overflow-y:auto;
+
+contain:content;
 }
+
 
 /* Section title */
 .notes-box .section-title {
@@ -322,19 +288,6 @@ body {
   list-style: none;
 }
 
-.notes-box li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  margin-bottom: 8px;
-  padding: 6px 4px;
-  border-radius: 8px;
-  color: #e6d4ff;
-  line-height: 1.5;
-  transition: background .2s ease, transform .2s ease;
-}
-
 .notes-box li:hover {
   background: rgba(255,255,255,.03);
   transform: translateX(2px);
@@ -354,42 +307,72 @@ body {
   opacity: 1;
   transform: translateX(0);
 }
+#notesList{
+margin:0;
+padding:0;
+list-style:none;
+}
+
+#notesList li{
+display:flex;
+gap:8px;
+font-size:13px;
+padding:6px 0;
+opacity:.9;
+}
+/* arrow ringan */
+.arrow{
+color:#9f7bff;
+font-size:11px;
+}
 /* custom scrollbar */
 .notes-box::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 .notes-box::-webkit-scrollbar-thumb {
-  background: linear-gradient(#7f2aff, #b66bff);
-  border-radius: 20px;
+  background:#7f2aff;
+  border-radius: 10px;
 }
 .notes-box::-webkit-scrollbar-track {
   background: transparent;
-  margin: 6px 0;
+  margin: 8px 0;
 }
 /* =========================
    MODERN DOWNLOAD BUTTON
 ========================= */
-.download-btn {
-  position: relative;
-  width: 100%;
-  margin-top: 14px;
-  padding: 14px 18px;
-  border-radius: 16px;
-  border: none;
-  background: linear-gradient(135deg, #7f2aff, #b66bff);
-  color: #fff;
-  font-weight: 600;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: all .25s ease;
-  box-shadow:
-    0 10px 25px rgba(159,123,255,.35),
-    inset 0 0 0 rgba(255,255,255,0);
-  overflow: hidden;
+.download-btn{
+ position:relative;
+width:100%;
+margin-top:14px;
+padding:12px;
+
+border-radius:14px;
+border:none;
+
+background:linear-gradient(135deg,#7f2aff,#b66bff);
+
+color:#fff;
+font-weight:600;
+font-size:14px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+
+cursor:pointer;
+transition:transform .2s ease;
+}
+
+.download-btn:hover:not(:disabled){
+transform:translateY(-1px);
+box-shadow: 0 15px 35px rgba(159,123,255,.55);
+}
+
+.download-btn:disabled{
+opacity:.6;
+cursor:not-allowed;
+box-shadow: none;
 }
 
 /* glow border animation */
@@ -411,12 +394,6 @@ body {
   z-index: -1;
 }
 
-/* hover state */
-.download-btn:hover:not(:disabled) {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 15px 35px rgba(159,123,255,.55);
-}
-
 .download-btn:hover:not(:disabled)::before {
   opacity: .7;
   animation: gradientMove 6s linear infinite;
@@ -425,13 +402,6 @@ body {
 /* active click */
 .download-btn:active:not(:disabled) {
   transform: scale(0.97);
-}
-
-/* disabled state */
-.download-btn:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-  box-shadow: none;
 }
 
 /* icon style */
@@ -445,12 +415,6 @@ body {
   letter-spacing: .3px;
 }
 
-/* gradient animation */
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 400% 50%; }
-}
-
 /* =========================
    DOWNLOAD PROGRESS BAR
 ========================= */
@@ -459,36 +423,28 @@ body {
   text-align: center;
 }
 
-.progress-bar {
-  width: 100%;
-  height: 10px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: inset 0 0 10px rgba(0,0,0,.5);
+.progress-bar{
+width:100%;
+height:8px;
+background:rgba(255,255,255,.08);
+border-radius:20px;
+overflow:hidden;
 }
 
-.progress-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 20px;
-  background: linear-gradient(90deg, #7b2cff, #c38cff, #00e0ff);
-  background-size: 200% 200%;
-  animation: gradientFlow 4s linear infinite;
-  transition: width .3s ease;
+.progress-fill{
+height:100%;
+width:0%;
+border-radius:20px;
+
+background:linear-gradient(90deg,#7b2cff,#c38cff,#00e0ff);
+transition:width .25s ease;
 }
 
-#progressText {
-  display: block;
-  margin-top: 6px;
-  font-size: 12px;
-  opacity: .75;
-}
-
-/* ANIMATION */
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
+#progressText{
+display:block;
+margin-top:6px;
+font-size:12px;
+opacity:.7;
 }
 /* =========================
    STATUS TEXT (MODERN)
@@ -538,7 +494,8 @@ body {
 /* credits */
 .credits {
   font-size: 12px;
-  margin-left: 70px;
+  text-align:center;
+  margin-left:0;
   opacity: .7;
   margin-top: 12px;
   letter-spacing: .5px;
@@ -570,7 +527,6 @@ body {
   color: #fff;
   font-weight: 600;
   transition: 0.25s ease;
-  backdrop-filter: blur(10px);
   box-shadow: 0 0 12px rgba(195,140,255,0.15);
   border: 1px solid rgba(255,255,255,0.12);
 }
@@ -612,20 +568,27 @@ body {
 /* =========================
    ANIMATION
 ========================= */
-@keyframes panelEnter {
-  from {
-    opacity: 0;
-    transform: translateY(25px) scale(.94);
-    filter: blur(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
+@keyframes gradientMove{
+0%{background-position:0% 50%}
+100%{background-position:300% 50%}
 }
 
-@keyframes bgFade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+@keyframes shimmer{
+to{background-position:200% center}
+}
+
+@keyframes titleFade{
+from{
+opacity:0;
+transform:translateY(-10px);
+}
+to{
+opacity:1;
+transform:none;
+}
+}
+
+@keyframes bgFade{
+from{opacity:0}
+to{opacity:1}
 }

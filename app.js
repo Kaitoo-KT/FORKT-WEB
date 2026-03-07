@@ -14,10 +14,12 @@ const vipStatusText = document.getElementById("vipStatus");
    CONFIG
 ========================== */
 const VERSION_JSON_URL =
-  "https://raw.githubusercontent.com/Kaitoo-KT/FORKT-VIP/main/version.json";
+"https://raw.githubusercontent.com/Kaitoo-KT/FORKT-VIP/main/version.json";
 
 const DOWNLOAD_URL =
-  "https://raw.githubusercontent.com/Kaitoo-KT/FORKT-VIP/FORKT/FORKT%20PANEL.zip";
+"https://raw.githubusercontent.com/Kaitoo-KT/FORKT-VIP/FORKT/FORKT%20PANEL.zip";
+
+const MAX_NOTES = 20;
 
 /* ==========================
    GLOBAL STATE
@@ -28,155 +30,134 @@ let CURRENT_VERSION = null;
    VIP LOCAL
 ========================== */
 function checkVipStatusLocal() {
+
   const isVip = localStorage.getItem("forkt_vip_permanent") === "1";
 
   if (!vipStatusText) return isVip;
 
   vipStatusText.textContent = isVip ? "VIP" : "ACCESS";
-  vipStatusText.classList.remove("vip", "free");
-  vipStatusText.classList.add(isVip ? "vip" : "free");
+  vipStatusText.className = "badge " + (isVip ? "vip" : "free");
 
   return isVip;
+
 }
 
 /* ==========================
    STATUS UI
 ========================== */
 function setStatus(label, text, color, enable = false) {
+
   if (!statusBadge || !statusText || !downloadBtn) return;
 
   statusBadge.textContent = label;
   statusBadge.style.color = color;
+
   statusText.textContent = text;
   downloadBtn.disabled = !enable;
+
+}
+
+/* ==========================
+   RENDER CHANGELOG
+========================== */
+function renderNotes(notes){
+
+  if(!Array.isArray(notes) || !notes.length){
+    notesList.innerHTML = "<li>No changelog available</li>";
+    return;
+  }
+
+  const limited = notes.slice(0, MAX_NOTES);
+
+  notesList.innerHTML = limited
+    .map(note => `<li><span class="arrow">➜</span>${note}</li>`)
+    .join("");
+
 }
 
 /* ==========================
    LOAD VERSION
 ========================== */
-async function loadVersion() {
-  setStatus("Checking", "Checking latest version...", "#ffd36b");
+async function loadVersion(){
+
+  setStatus("Checking","Checking latest version...","#ffd36b");
+
   versionText.textContent = "...";
   notesList.innerHTML = "<li>Loading...</li>";
 
-  try {
-    const res = await fetch(VERSION_JSON_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("Failed to fetch version");
+  try{
+
+    const res = await fetch(VERSION_JSON_URL,{cache:"no-store"});
+    if(!res.ok) throw new Error("Failed to fetch version");
 
     const data = await res.json();
-    if (!data.version) throw new Error("Invalid version.json");
 
-    CURRENT_VERSION = data.version;
+    CURRENT_VERSION = data.version || "N/A";
     versionText.textContent = CURRENT_VERSION;
 
-    notesList.innerHTML = "";
-    if (Array.isArray(data.notes) && data.notes.length) {
-      data.notes.forEach(note => {
-        const li = document.createElement("li");
-        li.innerHTML = `<i class="fa-solid fa-arrow-right"></i> ${note}`;
-        notesList.appendChild(li);
-      });
-    const observer = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if(entry.isIntersecting) {
-              entry.target.classList.add("visible");
-            }
-          });
-        },
-        {
-          threshold: 0.1
-        }
-      );
-      
-      // 4️⃣ Observasi semua li
-      document.querySelectorAll("#notesList li").forEach(li => {
-        observer.observe(li);
-      });
-    } else {
-      notesList.innerHTML = "<li>No changelog available</li>";
-    }
+    renderNotes(data.notes);
 
-    setStatus("Ready", "Latest version available ✔", "#6bffb3", true);
+    setStatus("Ready","Latest version available ✔","#6bffb3",true);
 
-  } catch (err) {
+  }catch(err){
+
     console.error(err);
+
     versionText.textContent = "N/A";
     notesList.innerHTML = "<li>Failed to load changelog</li>";
-    setStatus("Error", err.message, "#ff6b6b");
+
+    setStatus("Error",err.message,"#ff6b6b");
+
   }
+
 }
+
 /* ==========================
    DOWNLOAD
 ========================== */
-if (downloadBtn) {
-  downloadBtn.addEventListener("click", async () => {
-    if (!CURRENT_VERSION) {
-      alert("Version not loaded yet");
-      return;
-    }
+if(downloadBtn){
 
-    const filename = `FORKT-PANEL(${CURRENT_VERSION}).zip`;
+downloadBtn.addEventListener("click",()=>{
+
+  if(!CURRENT_VERSION){
+    alert("Version not loaded yet");
+    return;
+  }
+
+  const filename = `FORKT-PANEL(${CURRENT_VERSION}).zip`;
+
+  setStatus(
+    "Downloading",
+    `Downloading FORKT PANEL v${CURRENT_VERSION}...`,
+    "#9f7bff"
+  );
+
+  progressFill.style.width="100%";
+  progressText.textContent="Starting...";
+
+  const a=document.createElement("a");
+  a.href=DOWNLOAD_URL;
+  a.download=filename;
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(()=>{
+
+    progressText.textContent="Complete ✓";
 
     setStatus(
-      "Downloading",
-      `Downloading FORKT PANEL v${CURRENT_VERSION}...`,
-      "#9f7bff"
+      "Done",
+      `Download started ✔ (${filename})`,
+      "#6bffb3",
+      true
     );
 
-    progressFill.style.width = "0%";
-    progressText.textContent = "0%";
+  },600);
 
-    try {
-      const res = await fetch(DOWNLOAD_URL);
-      if (!res.ok) throw new Error("Download failed");
+});
 
-      const reader = res.body.getReader();
-      const contentLength = +res.headers.get("Content-Length");
-
-      let receivedLength = 0;
-      const chunks = [];
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        chunks.push(value);
-        receivedLength += value.length;
-
-        if (contentLength) {
-          const percent = Math.floor((receivedLength / contentLength) * 100);
-          progressFill.style.width = percent + "%";
-          progressText.textContent = percent + "%";
-        }
-      }
-
-      const blob = new Blob(chunks);
-      const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-
-      progressFill.style.width = "100%";
-      progressText.textContent = "Complete ✓";
-
-      setStatus(
-        "Done",
-        `Download completed ✔ (${filename})`,
-        "#6bffb3",
-        true
-      );
-
-    } catch (err) {
-      console.error(err);
-      setStatus("Error", "Failed to download file", "#ff6b6b");
-    }
-  });
 }
 
 /* ==========================
